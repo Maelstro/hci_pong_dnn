@@ -6,7 +6,10 @@ if ~exist('camera', 'var')
 end
 
 % Uncomment only on first boot
-%load('best_dnn_model.mat');
+if ~exist('net', 'var')
+    load('best_dnn_model.mat');
+end
+
 
 % Input image
 inputSize = net.Layers(1).InputSize(1:2);
