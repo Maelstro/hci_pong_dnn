@@ -7,7 +7,7 @@ end
 
 % Uncomment only on first boot
 if ~exist('net', 'var')
-    load('best_dnn_model.mat');
+    load('net_model.mat');
 end
 
 
@@ -55,7 +55,6 @@ while 1 > 0
     im = snapshot(camera);
     im = imresize(im,inputSize);
     im_g = rgb2gray(im);
-    im_g = im_g(:,:,1);
     image(ax_im1, im_g)
     
     [label,score] = classify(net,im_g);
