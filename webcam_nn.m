@@ -1,4 +1,4 @@
-close all;
+close all;clear all;
 
 % Initialize a camera - make sure it is no.1 device
 if ~exist('camera', 'var')
@@ -48,6 +48,10 @@ block.XData = [ 3, 5];
 block.YData = [-9,-9];
 
 set( gcf, "WindowKeyPressFcn",   { @gesture_sel, block } );
+scene = snapshot(camera);
+scene = imresize(scene,inputSize);
+scene_g = rgb2gray(scene);
+
 
 % -------------------- Main loop for the program ----------------------- %
 while 1 > 0
@@ -56,8 +60,11 @@ while 1 > 0
     im = imresize(im,inputSize);
     im_g = rgb2gray(im);
     image(ax_im1, im_g)
-    
-    [label,score] = classify(net,im_g);
+    diff = im_g - scene_g;
+    figure(4)
+    imshow(diff);
+
+    [label,score] = classify(net,diff);
     title(ax_im1,{char(label),num2str(max(score),2)});
 
     % Select the top five predictions
