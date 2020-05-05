@@ -25,39 +25,29 @@ numTrainFiles = 71;
 layers = [
     imageInputLayer([128 128 1])
     
-    convolution2dLayer(3,16,'Padding','same')
+    convolution2dLayer(5,16,'Padding','same')
     batchNormalizationLayer
     reluLayer
     
     maxPooling2dLayer(2,'Stride',2)
     
-    convolution2dLayer(3,32,'Padding','same')
+    convolution2dLayer(5,32,'Padding','same')
     batchNormalizationLayer
     reluLayer
     
     maxPooling2dLayer(2,'Stride',2)
     
-    convolution2dLayer(3,64,'Padding','same')
+    convolution2dLayer(5,64,'Padding','same')
     batchNormalizationLayer
     reluLayer
     
     maxPooling2dLayer(2,'Stride',2)
     
-    convolution2dLayer(3,128,'Padding','same')
+    convolution2dLayer(5,32,'Padding','same')
     batchNormalizationLayer
     reluLayer
     
     maxPooling2dLayer(2,'Stride',2)
-    
-    convolution2dLayer(3,64,'Padding','same')
-    batchNormalizationLayer
-    reluLayer
-    
-    maxPooling2dLayer(2,'Stride',2)
-    
-    convolution2dLayer(3,32,'Padding','same')
-    batchNormalizationLayer
-    reluLayer
     
     fullyConnectedLayer(3)
     softmaxLayer
@@ -68,7 +58,7 @@ options = trainingOptions('sgdm', ...
     'MaxEpochs',50, ...
     'Shuffle','every-epoch', ...
     'ValidationData',imdsValidation, ...
-    'ValidationFrequency',3, ...
+    'ValidationFrequency',5, ...
     'Verbose',false, ...
     'Plots','training-progress');
 
