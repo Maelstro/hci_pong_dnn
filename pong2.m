@@ -28,6 +28,7 @@ set( gcf, "WindowKeyPressFcn",   { @keyboard_down, block } );
 set( gcf, "WindowKeyReleaseFcn", { @keyboard_up,   block } );
 
 % --------------------------- Loop ---------------------------------- %
+
 while 1
     tic;
     
@@ -47,7 +48,7 @@ while 1
         end
     end
     
-    pause(.01);
+    pause(.05);
     ball.XData  = ball.XData  + ball.UserData.speed_x*toc;
     ball.YData  = ball.YData  + ball.UserData.speed_y*toc;
     block.XData = block.XData + block.UserData.speed_x*toc;

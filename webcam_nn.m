@@ -10,6 +10,9 @@ if ~exist('net', 'var')
     load('net_model.mat');
 end
 
+% Label initialization
+label = 'y';
+first_iter = 10;
 
 % Input image
 inputSize = net.Layers(1).InputSize(1:2);
@@ -35,8 +38,8 @@ ball = line;
 ball.Color = 'blue';
 ball.Marker = '.';
 ball.MarkerSize = 50;
-ball.XData = 5;
-ball.YData = 4;
+ball.XData = -8;
+ball.YData = -6;
 ball.UserData.speed_x = 10;
 ball.UserData.speed_y = 10;
 
@@ -44,26 +47,25 @@ block = line;
 block.Color = 'yellow';
 block.LineWidth = 5;
 block.UserData.speed_x = 0;
-block.XData = [ 3, 5];
+block.XData = [ 2, 6];
 block.YData = [-9,-9];
 
-set( gcf, "WindowKeyPressFcn",   { @gesture_sel, block } );
 scene = snapshot(camera);
 scene = imresize(scene,inputSize);
 scene_g = rgb2gray(scene);
 
 
 % -------------------- Main loop for the program ----------------------- %
+% Loop for ML recognition
 while 1 > 0
     % Display and classify the image
     im = snapshot(camera);
     im = imresize(im,inputSize);
     im_g = rgb2gray(im);
-    image(ax_im1, im_g)
     diff = im_g - scene_g;
-    figure(4)
-    imshow(diff);
-
+    image(ax_im1, im_g);
+    
+   
     [label,score] = classify(net,diff);
     title(ax_im1,{char(label),num2str(max(score),2)});
 
@@ -80,9 +82,13 @@ while 1 > 0
     xlim(ax_im2,[0 1])
     yticklabels(ax_im2,classNamesTop)
     ax_im2.YAxisLocation = 'right';
-
     drawnow
     tic;
+    
+    if first_iter >= 10 && first_iter <= 14
+        label = 'y';
+        first_iter = first_iter + 1
+    end
     
     if (label == 'c') && (min(block.XData) > -10)
         block.UserData.speed_x = -20;
@@ -92,50 +98,26 @@ while 1 > 0
         block.UserData.speed_x = 0;
     end
     
-    if ball.XData < -10 || ball.XData >  10        
+    if ball.XData < -9.5 || ball.XData >  9.5        
         ball.UserData.speed_x = - ball.UserData.speed_x;
     end
     
-    if ball.YData > 10
+    if ball.YData > 9.5
         ball.UserData.speed_y = - ball.UserData.speed_y;
     end
     
     if ball.YData < - 9
         if ball.XData < min(block.XData) || ball.XData > max(block.XData)
             disp("You lost!")
-            clear cam;
+            clear camera;
             close all; break;
         else 
             ball.UserData.speed_y = - ball.UserData.speed_y;
         end
     end
-    
-    pause(.01);
+    pause(0.01);
     ball.XData  = ball.XData  + ball.UserData.speed_x*toc;
     ball.YData  = ball.YData  + ball.UserData.speed_y*toc;
     block.XData = block.XData + block.UserData.speed_x*toc;
     
 end
-
-% -------------------------- Functions ------------------------------ %
-function keyboard_down( figure, event, block)
-    switch event.Key
-        case 'leftarrow',  block.UserData.speed_x = -20; 
-        case 'rightarrow', block.UserData.speed_x =  20;
-    end
-end
-
-function keyboard_up( figure, event, block)
-    block.UserData.speed_x = 0;
-end
-
-function gesture_sel( figure, label, block)
-    if label == 'c'
-        block.UserData.speed_x = -20;
-    elseif label == 'v'
-        block.UserData.speed_x =  20;
-    else
-        block.UserData.speed_x = 0;
-    end
-end
-
