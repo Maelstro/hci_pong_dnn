@@ -1,2 +1,4 @@
 # Ignore all the .asv files
 *.asv
+# Ignore all the dataset images
+*.pgm

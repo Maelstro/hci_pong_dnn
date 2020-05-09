@@ -7,7 +7,7 @@ end
 
 % Uncomment only on first boot
 if ~exist('net', 'var')
-    load('net_model.mat');
+    load('best_net_model.mat');
 end
 
 % Label initialization
@@ -64,6 +64,7 @@ while 1 > 0
     im_g = rgb2gray(im);
     diff = im_g - scene_g;
     image(ax_im1, im_g);
+    colormap(ax_im1, gray(256));
     
    
     [label,score] = classify(net,diff);
@@ -87,7 +88,7 @@ while 1 > 0
     
     if first_iter >= 10 && first_iter <= 14
         label = 'y';
-        first_iter = first_iter + 1
+        first_iter = first_iter + 1;
     end
     
     if (label == 'c') && (min(block.XData) > -10)
