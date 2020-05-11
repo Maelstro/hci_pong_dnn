@@ -54,6 +54,7 @@ scene = snapshot(camera);
 scene = imresize(scene,inputSize);
 scene_g = rgb2gray(scene);
 
+set( gcf, "WindowKeyPressFcn",   { @keyboard_down} );
 
 % -------------------- Main loop for the program ----------------------- %
 % Loop for ML recognition
@@ -121,4 +122,12 @@ while 1 > 0
     ball.YData  = ball.YData  + ball.UserData.speed_y*toc;
     block.XData = block.XData + block.UserData.speed_x*toc;
     
+end
+
+close all;
+
+function keyboard_down(figure, event)
+    if (event.Key == 'q')
+        quit(0, "force");
+    end
 end
