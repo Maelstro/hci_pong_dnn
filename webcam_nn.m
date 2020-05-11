@@ -55,6 +55,7 @@ scene = imresize(scene,inputSize);
 scene_g = rgb2gray(scene);
 
 set( gcf, "WindowKeyPressFcn",   { @keyboard_down} );
+disp("Press q to exit the game and MATLAB");
 
 % -------------------- Main loop for the program ----------------------- %
 % Loop for ML recognition
