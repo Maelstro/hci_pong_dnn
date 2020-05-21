@@ -23,6 +23,10 @@ h.Position(3) = 2*h.Position(3);
 ax_im1 = subplot(1,2,1);
 ax_im2 = subplot(1,2,2);
 ax_im2.ActivePositionProperty = 'position';
+c = uicontrol;
+c.String = 'Exit';
+c.Position = [20 20 100 60];
+c.Callback = @exitButtonPushed;
 
 % pong2
 % [press left and right keyboard arrows to move block]
@@ -54,9 +58,6 @@ scene = snapshot(camera);
 scene = imresize(scene,inputSize);
 scene_g = rgb2gray(scene);
 
-set( gcf, "WindowKeyPressFcn",   { @keyboard_down} );
-disp("Press q to exit the game and MATLAB");
-
 % -------------------- Main loop for the program ----------------------- %
 % Loop for ML recognition
 while 1 > 0
@@ -77,6 +78,7 @@ while 1 > 0
     idx = idx(3:-1:1);
     scoreTop = score(idx);
     classNamesTop = string(classes(idx));
+    
 
     % Plot the histogram
     barh(ax_im2,scoreTop)
@@ -87,7 +89,8 @@ while 1 > 0
     ax_im2.YAxisLocation = 'right';
     drawnow
     tic;
-    
+
+        
     if first_iter >= 10 && first_iter <= 14
         label = 'y';
         first_iter = first_iter + 1;
@@ -127,8 +130,6 @@ end
 
 close all;
 
-function keyboard_down(figure, event)
-    if (event.Key == 'q')
-        quit(0, "force");
-    end
+function exitButtonPushed(src,event)
+    quit(0, "force");
 end
